@@ -1,18 +1,18 @@
-# 💬 Simple RPC Chatroom in Go
+# Simple RPC Chatroom in Go
 
-## 📘 Overview
-A simple chatroom built using Go’s **net/rpc** package.  
-Each client connects to the server, sends messages, and receives the full chat history.
+## Overview
+  A simple chatroom built using Go’s **net/rpc** package.  
+  Each client connects to the server, sends messages, and receives the full chat history.
 
 ---
 
-## 🎥 Demo Video
+## Demo Video
 Watch the running demo here:  
 [▶️ Click to watch](https://drive.google.com/file/d/1qqBQyplN591b0Ed2ivn6BkMZYM_6TuSX/view?usp=drive_link)
 
 ---
 
-## ✨ Features
+## Features
 💠 **RPC-based Communication** – Implements Go’s `net/rpc` for client-server interaction.  
 💠 **Shared Chat History** – Every connected client sees the entire chat log.  
 💠 **Multiple Clients Support** – Handles concurrent users seamlessly.  
@@ -23,7 +23,7 @@ Watch the running demo here:
 
 ---
 
-## 🧠 Example Output
+## Example Output
 Enter your name: Ahmed.
 
 Welcome One! You've joined the chat. Type a message to see the chat history.
@@ -43,9 +43,9 @@ exit
 
 ---
 
-## 👨‍💻 Prepared By
-  ###   🌟 **Ahmed Ibrahim Ahmed Elshenawy**
-  🎓   Faculty of Engineering – Department of Artificial Intelligence  
-  📅   **October 2025**  
-  💼   *Project: Simple RPC Chatroom using Go*  
-  💬   *"Clean code. Clear communication."*
+## Prepared By
+  ###   **Ahmed Ibrahim Ahmed Elshenawy**
+  🎓     Faculty of Engineering – Department of Artificial Intelligence  
+  📅     October 2025  
+  💼     *Project: Simple RPC Chatroom using Go*  
+  💬     *"Clean code. Clear communication."*
