@@ -78,6 +78,7 @@ simple-rpc-chatroom/
 ├── server.go        # RPC server – stores and returns messages
 ├── client.go        # RPC client – sends messages and displays history
 └── README.md        # Documentation file
+
 📝 Documentation Summary
 This project demonstrates:
 
