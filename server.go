@@ -8,57 +8,40 @@ import (
 	"time"
 )
 
-// Message structure to store sender and content
-type Message struct {
-	Sender    string
-	Content   string
-	Timestamp string
-}
-
-// ChatService holds the chat history
 type ChatService struct {
-	mu      sync.Mutex
-	history []Message
+	messages []string
+	mu       sync.Mutex
 }
 
-// SendMessage is called remotely by clients to send a message
-func (c *ChatService) SendMessage(msg Message, reply *[]Message) error {
+func (c *ChatService) SendMessage(data map[string]string, reply *[]string) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	// Add timestamp and store message
-	msg.Timestamp = time.Now().Format("15:04:05")
-	c.history = append(c.history, msg)
+	name := data["name"]
+	message := data["message"]
+	timestamp := time.Now().Format("15:04:05")
 
-	// Return full chat history to the client
-	*reply = c.history
-	return nil
-}
+	formatted := fmt.Sprintf("[%s] %s: %s", timestamp, name, message)
+	c.messages = append(c.messages, formatted)
 
-// GetHistory returns all stored messages (if client just wants to fetch)
-func (c *ChatService) GetHistory(_ struct{}, reply *[]Message) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	*reply = c.history
+	*reply = append([]string(nil), c.messages...)
+	fmt.Printf("%s\n", formatted)
 	return nil
 }
 
 func main() {
-	chatService := new(ChatService)
-	rpc.Register(chatService)
+	server := new(ChatService)
+	rpc.Register(server)
 
 	listener, err := net.Listen("tcp", "127.0.0.1:1234")
 	if err != nil {
-		fmt.Println("Error starting server:", err)
-		return
+		panic(err)
 	}
-	defer listener.Close()
+	fmt.Println("Chat server running on port 1234...")
 
-	fmt.Println("Chat server is running on 127.0.0.1:1234...")
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Connection error:", err)
 			continue
 		}
 		go rpc.ServeConn(conn)
