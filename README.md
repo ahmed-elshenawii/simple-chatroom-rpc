@@ -24,22 +24,28 @@ Watch the running demo here:
 ---
 
 ## 🧠 Example Output
-Enter your name: One
+Enter your name: Ahmed.
+
 Welcome One! You've joined the chat. Type a message to see the chat history.
+
 Enter message (or 'exit' to quit):
 
 Hi
+
 ----- Chat History -----
+
 [01:42:31] One: Hi
+
 exit
+
 👋 Goodbye!
 
 
 ---
 
 ## 👨‍💻 Prepared By
-### 🌟 **Ahmed Ibrahim Ahmed Elshenawy**
-🎓 Faculty of Engineering – Department of Artificial Intelligence  
-📅 **October 2025**  
-💼 *Project: Simple RPC Chatroom using Go*  
-💬 *"Clean code. Clear communication."*
+  ###   🌟 **Ahmed Ibrahim Ahmed Elshenawy**
+  🎓   Faculty of Engineering – Department of Artificial Intelligence  
+  📅   **October 2025**  
+  💼   *Project: Simple RPC Chatroom using Go*  
+  💬   *"Clean code. Clear communication."*
