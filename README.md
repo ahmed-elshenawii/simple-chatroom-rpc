@@ -72,6 +72,6 @@ Documentation Summary
    Basic error handling for lost connections
 
 Prepared by
-   Ahmed Elshenawy
+   Ahmed Ibrahim Ahmed Elshenawy
    Faculty of Engineering – Department of Artificial Intelligence
    October 2025
