@@ -9,54 +9,47 @@ import (
 	"strings"
 )
 
-// Message struct (same as on server)
-type Message struct {
-	Sender    string
-	Content   string
-	Timestamp string
-}
-
 func main() {
-	// Try to connect to the server
+	// Connect to server
 	client, err := rpc.Dial("tcp", "127.0.0.1:1234")
 	if err != nil {
-		log.Fatal("❌ Connection error:", err)
+		log.Fatal("Connection error:", err)
 	}
 	defer client.Close()
-	fmt.Println("✅ Connected to chat server")
 
-	// Ask for user name
-	reader := bufio.NewReader(os.Stdin)
+	// Get user name
 	fmt.Print("Enter your name: ")
+	reader := bufio.NewReader(os.Stdin)
 	name, _ := reader.ReadString('\n')
 	name = strings.TrimSpace(name)
 
+	fmt.Printf("Welcome %s! You've joined the chat. Type a message to see the chat history.\n", name)
+	fmt.Println("Enter message (or 'exit' to quit):")
+
 	for {
 		fmt.Print("> ")
-		text, _ := reader.ReadString('\n')
-		text = strings.TrimSpace(text)
+		message, _ := reader.ReadString('\n')
+		message = strings.TrimSpace(message)
 
-		if text == "exit" {
-			fmt.Println("👋 Exiting chat...")
+		if strings.ToLower(message) == "exit" {
+			fmt.Println("Goodbye!")
 			break
 		}
 
-		// Prepare message
-		msg := Message{Sender: name, Content: text}
+		var reply []string
+		err = client.Call("ChatService.SendMessage", map[string]string{
+			"name":    name,
+			"message": message,
+		}, &reply)
 
-		// Send message to server and get chat history
-		var history []Message
-		err := client.Call("ChatService.SendMessage", msg, &history)
 		if err != nil {
-			fmt.Println("❌ RPC Error:", err)
+			fmt.Println("RPC Error:", err)
 			break
 		}
 
-		// Display full chat history
 		fmt.Println("----- Chat History -----")
-		for _, m := range history {
-			fmt.Printf("[%s] %s: %s\n", m.Timestamp, m.Sender, m.Content)
+		for _, line := range reply {
+			fmt.Println(line)
 		}
-		fmt.Println("------------------------")
 	}
 }
