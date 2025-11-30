@@ -3,53 +3,38 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
-	"net/rpc"
+	"net"
 	"os"
-	"strings"
 )
 
 func main() {
-	// Connect to server
-	client, err := rpc.Dial("tcp", "127.0.0.1:1234")
+	conn, err := net.Dial("tcp", "localhost:9000")
 	if err != nil {
-		log.Fatal("Connection error:", err)
+		fmt.Println("Error connecting to server:", err)
+		return
 	}
-	defer client.Close()
+	fmt.Println("Connected to server!")
+	go receive(conn)
 
-	// Get user name
-	fmt.Print("Enter your name: ")
-	reader := bufio.NewReader(os.Stdin)
-	name, _ := reader.ReadString('\n')
-	name = strings.TrimSpace(name)
-
-	fmt.Printf("Welcome %s! You've joined the chat. Type a message to see the chat history.\n", name)
-	fmt.Println("Enter message (or 'exit' to quit):")
-
-	for {
-		fmt.Print("> ")
-		message, _ := reader.ReadString('\n')
-		message = strings.TrimSpace(message)
-
-		if strings.ToLower(message) == "exit" {
-			fmt.Println("Goodbye!")
-			break
+	reader := bufio.NewScanner(os.Stdin)
+	for reader.Scan() {
+		text := reader.Text()
+		if text == "" {
+			continue
 		}
+		fmt.Fprintln(conn, text)
+	}
 
-		var reply []string
-		err = client.Call("ChatService.SendMessage", map[string]string{
-			"name":    name,
-			"message": message,
-		}, &reply)
+	if err := reader.Err(); err != nil {
+		fmt.Println("Error reading input:", err)
+	}
+}
 
-		if err != nil {
-			fmt.Println("RPC Error:", err)
-			break
-		}
+func receive(conn net.Conn) {
+	scanner := bufio.NewScanner(conn)
+	for scanner.Scan() {
+		line := scanner.Text()
 
-		fmt.Println("----- Chat History -----")
-		for _, line := range reply {
-			fmt.Println(line)
-		}
+		fmt.Println(line)
 	}
 }
