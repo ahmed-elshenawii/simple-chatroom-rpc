@@ -1,51 +1,68 @@
-# Simple RPC Chatroom in Go
+# Go Realtime Chat
 
-## Overview
-  A simple chatroom built using Go’s **net/rpc** package.  
-  Each client connects to the server, sends messages, and receives the full chat history.
-
----
-
-## Demo Video
-Watch the running demo here:  
-[▶️ Click to watch](https://drive.google.com/file/d/1qqBQyplN591b0Ed2ivn6BkMZYM_6TuSX/view?usp=drive_link)
-
----
+This is a simple realtime chat system built with Go.
+It supports multiple clients, broadcasting messages, and concurrency using goroutines and channels.
 
 ## Features
-💠 **RPC-based Communication** – Implements Go’s `net/rpc` for client-server interaction.  
-💠 **Shared Chat History** – Every connected client sees the entire chat log.  
-💠 **Multiple Clients Support** – Handles concurrent users seamlessly.  
-💠 **Real-Time Updates** – Instantly displays all new messages for all clients.  
-💠 **In-Memory Message Storage** – Keeps messages during the active session.  
-💠 **Error Handling** – Displays clear messages when the server is unreachable.  
-💠 **Graceful Exit** – Type `exit` to leave the chat safely.  
 
----
+* Real-time broadcasting to all clients
+* No self-echo: clients do not see their own messages
+* Join/Leave notifications for other clients
+* Each client has its own send/receive goroutines
+* Clients list protected with sync.Mutex
+* Messages are plain text (no JSON for join/leave notifications)
 
-## Example Output
-Enter your name: Ahmed.
+## How it Works
 
-Welcome One! You've joined the chat. Type a message to see the chat history.
+1. Client connects to the server.
+2. When a client joins, all other clients are notified:
 
-Enter message (or 'exit' to quit):
+```
+User 1 joined
+```
 
-Hi
+3. When a client sends a message, it is broadcasted to all other clients (no self-echo):
 
------ Chat History -----
+```
+User 1: Hello everyone!
+```
 
-[01:42:31] One: Hi
+4. When a client leaves, all other clients are notified:
 
-exit
+```
+User 1 left
+```
 
-👋 Goodbye!
+## Running the Project
 
+### Server
 
----
+```bash
+go run server.go
+```
 
-## Prepared By
-  ###   **Ahmed Ibrahim Ahmed Elshenawy**
-  🎓     Faculty of Engineering – Department of Artificial Intelligence  
-  📅     October 2025  
-  💼     *Project: Simple RPC Chatroom using Go*  
-  💬     *"Clean code. Clear communication."*
+### Client 1
+
+```bash
+go run client.go
+```
+
+### Client 2
+
+```bash
+go run client.go
+```
+
+### Client 3 (optional)
+
+```bash
+go run client.go
+```
+
+Start typing messages in the client terminals. Messages will be broadcasted to all other clients in real-time.
+
+## Files
+
+* `server.go`: TCP chat server with broadcasting and concurrency
+* `client.go`: TCP chat client that sends/receives messages
+* `README.md`: Project description and instructions
