@@ -1,68 +1,81 @@
-# Go Realtime Chat
+# Simple Chatroom RPC
 
-This is a simple realtime chat system built with Go.
-It supports multiple clients, broadcasting messages, and concurrency using goroutines and channels.
+This repository contains a simple real-time chat application built using Go and net/rpc.
+It includes:
 
-## Features
+* server.go — RPC chat server
+* client.go — Chat client (CLI)
 
-* Real-time broadcasting to all clients
-* No self-echo: clients do not see their own messages
-* Join/Leave notifications for other clients
-* Each client has its own send/receive goroutines
-* Clients list protected with sync.Mutex
-* Messages are plain text (no JSON for join/leave notifications)
+---
 
-## How it Works
+## 🎥 Demo Recording
 
-1. Client connects to the server.
-2. When a client joins, all other clients are notified:
+[Click here to watch the demo](https://drive.google.com/file/d/1qqBQyplN591b0Ed2ivn6BkMZYM_6TuSX/view?usp=drive_link)
 
-```
-User 1 joined
-```
+---
 
-3. When a client sends a message, it is broadcasted to all other clients (no self-echo):
+## Project Structure
 
 ```
-User 1: Hello everyone!
+/simple-chatroom-rpc
+│-- server.go
+│-- client.go
+│-- README.md
 ```
 
-4. When a client leaves, all other clients are notified:
+---
 
-```
-User 1 left
-```
+##  How to Run the Project
 
-## Running the Project
-
-### Server
+### 1️⃣ Run the Server
 
 ```bash
 go run server.go
 ```
 
-### Client 1
+### 2️⃣ Run the Client
 
 ```bash
 go run client.go
 ```
 
-### Client 2
+---
 
-```bash
-go run client.go
+##  How It Works
+
+### Server
+
+* Listens on `127.0.0.1:1234`
+* Provides RPC method `ChatService.SendMessage`
+* Stores chat messages in memory, with timestamp
+* Returns full chat history to any client
+
+### Client
+
+* Connects to server via RPC
+* User enters their name once
+* Every message sent → server updates history → returns full chat history
+* Type `exit` to quit
+
+---
+
+##  Example Chat Output
+
+```
+[12:33:10] Ahmed: Hello
+[12:33:15] Sara: Hi Ahmed!
+[12:33:20] Omar: Welcome guys
 ```
 
-### Client 3 (optional)
+---
 
-```bash
-go run client.go
-```
+##  Notes
 
-Start typing messages in the client terminals. Messages will be broadcasted to all other clients in real-time.
+* Chat history is in-memory only — resets if server restarts.
+* Works on any OS with Go installed.
 
-## Files
+---
 
-* `server.go`: TCP chat server with broadcasting and concurrency
-* `client.go`: TCP chat client that sends/receives messages
-* `README.md`: Project description and instructions
+##  Prepared by 
+
+Ahmed Elshenawy
